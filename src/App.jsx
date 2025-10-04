@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; // <-- ADDED useEffect import
 
 // --- Internal CSS Styles (Refined for Centering and Layout Consistency) ---
 const customStyles = `
@@ -16,11 +16,23 @@ const customStyles = `
         --bg-light: #f9fafb; /* Off-White Background - Use this for sections */
         --text-dark: #1f2937; /* Dark Gray Text */
         --text-secondary: #6b7280; /* Muted Gray Text */
-        --card-bg: #ffffff;
+        --card-bg: #ffffff;\
         --shadow-md: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
         --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
         --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
         --rounded-xl: 0.75rem;
+    }
+    
+    /* New Keyframes for smooth entrance animation */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     /* Base Reset and Typography */
@@ -101,7 +113,7 @@ const customStyles = `
     .py-16 { padding-top: 4rem; padding-bottom: 4rem; }
     .py-24 { padding-top: 6rem; padding-bottom: 6rem; }
     
-    /* --- 1. Header & Navigation (CRITICAL FIXES HERE) --- */
+    /* --- 1. Header & Navigation --- */
     .header {
         background-color: var(--card-bg);
         box-shadow: none;
@@ -201,7 +213,34 @@ const customStyles = `
         color: var(--primary-blue);
     }
     
-    /* ... (rest of CSS remains the same) ... */
+    /* --- SCROLL ANIMATION CLASSES (New dynamic approach) --- */
+    .scroll-animate {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        will-change: opacity, transform;
+    }
+    
+    /* This class is added by the Intersection Observer when element is in view */
+    .scroll-animate.animate-visible {
+        opacity: 1;
+        transform: translateY(0);
+        animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    /* We apply the animation to the Hero section content on load, regardless of scroll,
+       but the rest is handled by the JS observer. */
+    .hero-content-text {
+        animation: fadeInUp 0.8s ease-out forwards;
+        animation-delay: 0.1s;
+    }
+    .hero-image-box {
+        animation: fadeInUp 0.8s ease-out forwards;
+        animation-delay: 0.3s;
+    }
+
+
+    /* --- 2. Layout & Component Styling (Hero) --- */
     
     .hero-section {
         padding-top: 5rem;
@@ -219,8 +258,8 @@ const customStyles = `
         .hero-grid {
             grid-template-columns: 3fr 2fr;
         }
-        .hero-content { order: 1; }
-        .hero-image { order: 2; }
+        .hero-content-text { order: 1; }
+        .hero-image-box { order: 2; }
     }
 
     .hero-subtitle {
@@ -257,16 +296,24 @@ const customStyles = `
         }
     }
 
+    /* BUTTON SIZE FIX: Reduced padding and font size for mobile first, then scaled up on larger screens */
     .button-primary, .button-secondary {
         display: inline-flex;
         justify-content: center;
         align-items: center;
-        padding: 0.8rem 1.75rem;
+        padding: 0.7rem 1.5rem; /* Smaller padding for better mobile fit */
         border-radius: var(--rounded-xl);
-        font-size: 1rem;
+        font-size: 0.95rem; /* Slightly smaller font size for mobile */
         font-weight: 600;
         transition: all 0.3s;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    @media (min-width: 640px) { 
+        .button-primary, .button-secondary {
+            padding: 0.8rem 1.75rem; /* Original padding restored/increased for tablet/desktop */
+            font-size: 1rem;
+        }
     }
 
     .button-primary {
@@ -293,11 +340,11 @@ const customStyles = `
         transform: translateY(-2px);
     }
     
-    .hero-image {
+    .hero-image-box {
         display: flex;
         justify-content: center;
     }
-
+    /* Profile Image Styles */
     .profile-graphic {
         position: relative;
         width: 100%;
@@ -312,12 +359,16 @@ const customStyles = `
         overflow: hidden;
     }
     
-    /* New styling for the Avatar silhouette to match the reference */
-    .profile-graphic svg {
-        width: 70%;
-        height: 70%;
-        color: var(--primary-blue);
+    /* Style for the actual image inside the graphic container */
+    .profile-graphic img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Ensures the image covers the circular area */
+        display: block;
     }
+    
+    /* REMOVED: .profile-graphic svg style block */
+
 
     /* --- 3. About Section --- */
     .about-section {
@@ -485,7 +536,7 @@ const customStyles = `
     .tag-accent { background-color: rgba(147, 51, 234, 0.1); color: var(--accent-light); }
 
 
-    /* --- 5. Skills Section (Major visual overhaul) --- */
+    /* --- 5. Skills Section --- */
     .skills-section {
         background-color: var(--bg-light);
     }
@@ -507,14 +558,14 @@ const customStyles = `
     
     .skill-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, 1fr); /* 3 columns on mobile/tablet */
         gap: 2rem 1rem;
         text-align: center;
     }
 
     @media (min-width: 768px) {
         .skill-grid {
-            grid-template-columns: repeat(6, 1fr);
+            grid-template-columns: repeat(6, 1fr); /* 6 columns on desktop */
             gap: 2.5rem 0.5rem;
         }
     }
@@ -553,7 +604,7 @@ const customStyles = `
         color: var(--text-secondary);
     }
 
-    /* --- 6. Experience Timeline (Major visual overhaul) --- */
+    /* --- 6. Experience Timeline (Responsive Rework) --- */
     .experience-section {
         background-color: var(--bg-light);
     }
@@ -564,100 +615,23 @@ const customStyles = `
         margin-left: auto;
         margin-right: auto;
         padding-top: 1rem;
+        /* Ensure there's space for the line/dot on mobile */
+        padding-left: 1rem;
     }
 
     .timeline-line {
         position: absolute;
-        left: 50%;
         top: 0;
         bottom: 0;
         width: 2px; /* Thinner line */
         background-color: rgba(76, 55, 154, 0.1); /* Lighter line color */
-        transform: translateX(-50%);
     }
     
-    /* Ensure mobile view also uses the centered line/desktop layout for a clean look */
-    @media (max-width: 767px) {
-        .timeline-line {
-            left: 50%;
-            transform: translateX(-50%); 
-        }
-        .timeline-item {
-            padding-left: 0;
-            display: flex;
-            justify-content: flex-end; /* All mobile content on the right of the dot */
-            text-align: left;
-        }
-        .timeline-content {
-            width: 48%; /* Adjust content width for better spacing */
-            padding-left: 1.5rem;
-            padding-right: 0.75rem;
-            border-left: 0; /* Remove highlight border for clean look */
-        }
-    }
-    
-    /* Re-enabling the standard desktop timeline structure */
-    @media (min-width: 768px) {
-        .timeline-item {
-            padding-left: 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-        
-        .timeline-content {
-            background-color: var(--card-bg);
-            border-radius: var(--rounded-xl);
-            width: 45%;
-            padding: 1.5rem;
-            border: 1px solid #e5e7eb;
-            box-shadow: var(--shadow-md);
-        }
-        
-        /* Odd items (Left Side) */
-        .timeline-item:nth-child(odd) {
-            justify-content: flex-start;
-            text-align: right; /* Content on the left side is right-aligned */
-        }
-        
-        /* Even items (Right Side) */
-        .timeline-item:nth-child(even) {
-            justify-content: flex-end;
-            text-align: left; /* Content on the right side is left-aligned */
-        }
-
-        .timeline-item:nth-child(odd) .timeline-achievements {
-            margin-left: 0;
-            margin-right: 1.25rem;
-            list-style: none;
-            text-align: right;
-        }
-        .timeline-item:nth-child(odd) .timeline-achievements:not(.text-only) li {
-             /* Custom bullet point for right side */
-            position: relative;
-        }
-        
-        .timeline-item:nth-child(odd) .timeline-achievements:not(.text-only) li::before {
-            content: "•";
-            color: var(--accent-light);
-            display: inline-block;
-            width: 1em;
-            margin-left: -1em;
-        }
-        
-        .timeline-item:nth-child(even) .timeline-achievements {
-            list-style: disc;
-            list-style-position: outside;
-            margin-left: 1.25rem;
-            margin-right: 0;
-        }
-    }
-
     .timeline-item {
         margin-bottom: 2.5rem;
         position: relative;
     }
-
+    
     .timeline-dot {
         z-index: 10;
         background-color: var(--primary-blue);
@@ -666,9 +640,117 @@ const customStyles = `
         border-radius: 50%;
         position: absolute;
         top: 0.75rem;
-        left: 50%; 
         transform: translateX(-50%); 
         border: 4px solid var(--bg-light); /* White ring to cover line */
+    }
+
+    /* Mobile Timeline Styles (Default for < 768px) */
+    .timeline-line {
+        left: 1.5rem; /* Line on the left side */
+        transform: none; 
+    }
+    .timeline-dot {
+        left: 1.5rem; /* Dot matches line position */
+    }
+    .timeline-item {
+        padding-left: 3.5rem; /* Offset content to the right of the dot */
+        padding-right: 0.5rem;
+        text-align: left;
+        display: block;
+    }
+    .timeline-content {
+        width: 100%; /* Use full width available in the padded item */
+        padding: 1.5rem;
+        margin-left: 0; 
+        border: 1px solid #e5e7eb;
+        box-shadow: var(--shadow-md);
+        background-color: var(--card-bg);
+        border-radius: var(--rounded-xl);
+    }
+
+    .timeline-achievements {
+        list-style: disc;
+        margin-left: 1.25rem;
+        padding-top: 0.5rem;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        margin-top: 0.5rem;
+        line-height: 1.5;
+    }
+    
+    .timeline-achievements.text-only {
+        list-style: none;
+        margin-left: 0;
+        padding-top: 0.5rem;
+    }
+
+    /* Desktop Timeline Styles (>= 768px) - Left/Right alternating layout */
+    @media (min-width: 768px) {
+        .timeline-container {
+            padding-left: 0;
+        }
+        .timeline-line {
+            left: 50%; /* Center the line */
+            transform: translateX(-50%);
+        }
+        .timeline-dot {
+            left: 50%; /* Center the dot */
+        }
+        
+        .timeline-item {
+            padding-left: 0;
+            padding-right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .timeline-content {
+            width: 45%; /* Half width for alternating sides */
+            /* Clear styles set for mobile */
+            margin-left: 0;
+            padding: 1.5rem;
+        }
+        
+        /* Odd items (Left Side) */
+        .timeline-item:nth-child(odd) {
+            justify-content: flex-start;
+            text-align: right; 
+        }
+        
+        /* Even items (Right Side) */
+        .timeline-item:nth-child(even) {
+            justify-content: flex-end;
+            text-align: left; 
+        }
+
+        /* Adjust content/list alignment for left-side boxes */
+        .timeline-item:nth-child(odd) .timeline-achievements {
+            list-style: none;
+            text-align: right;
+            margin-left: 0;
+            margin-right: 1.25rem; /* Push content away from the line */
+        }
+        /* Custom bullet point for right-aligned list text */
+        .timeline-item:nth-child(odd) .timeline-achievements:not(.text-only) li::before {
+             position: relative;
+        }
+        .timeline-item:nth-child(odd) .timeline-achievements:not(.text-only) li::before {
+            content: "•";
+            color: var(--accent-light);
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+
+        /* Adjust content/list alignment for right-side boxes */
+        .timeline-item:nth-child(even) .timeline-achievements {
+            list-style: disc;
+            list-style-position: outside;
+            margin-left: 1.25rem;
+            margin-right: 0;
+            text-align: left;
+        }
     }
     
     .timeline-date {
@@ -691,22 +773,6 @@ const customStyles = `
         margin-top: 0.25rem;
     }
 
-    .timeline-achievements {
-        list-style: disc;
-        margin-left: 1.25rem;
-        padding-top: 0.5rem;
-        font-size: 0.9rem;
-        color: var(--text-secondary);
-        margin-top: 0.5rem;
-        line-height: 1.5;
-    }
-    
-    .timeline-achievements.text-only {
-        list-style: none;
-        margin-left: 0;
-        padding-top: 0.5rem;
-    }
-    
     .timeline-achievements li {
         margin-bottom: 0.25rem;
     }
@@ -726,7 +792,7 @@ const customStyles = `
         margin-right: auto;
     }
     
-    @media (min-width: 768px) {
+    @media (min-width: 640px) { /* Changed from 768px to 640px for earlier transition */
         .cert-grid {
             grid-template-columns: repeat(2, 1fr);
         }
@@ -776,7 +842,7 @@ const customStyles = `
         margin-top: 0.1rem;
     }
 
-    /* --- 8. Contact Section (Aesthetic fix for shadow/border) --- */
+    /* --- 8. Contact Section --- */
     .contact-section {
         background-color: var(--bg-light);
     }
@@ -790,7 +856,7 @@ const customStyles = `
         margin-right: auto;
     }
     
-    @media (min-width: 768px) {
+    @media (min-width: 640px) { /* Changed from 768px to 640px for earlier transition */
         .contact-grid {
             grid-template-columns: repeat(3, 1fr);
         }
@@ -849,6 +915,13 @@ const customStyles = `
         flex-direction: column; /* Stacked on mobile */
         align-items: center;
         gap: 1rem;
+    }
+    
+    @media (min-width: 640px) {
+        .footer-content {
+            flex-direction: row;
+            justify-content: space-between;
+        }
     }
 
     .footer-links {
@@ -951,7 +1024,7 @@ const ProjectCard = ({ title, iconName, description, tags, borderColor }) => {
         }
     };
     return (
-        <div className="project-card">
+        <div className="project-card scroll-animate"> {/* ADDED scroll-animate class */}
             <div className="project-image-placeholder">
                 <GraphicSVG color={iconColor} />
             </div>
@@ -973,7 +1046,7 @@ const TimelineItem = ({ date, role, company, achievements, isTextOnly = false })
     return (
         <div className="timeline-item">
             <div className="timeline-dot"></div>
-            <div className="timeline-content">
+            <div className="timeline-content scroll-animate"> {/* ADDED scroll-animate class */}
                 <p className="timeline-date">{date}</p>
                 <h3 className="timeline-role">{role}</h3>
                 <p className="timeline-company">{company}</p>
@@ -990,6 +1063,39 @@ const TimelineItem = ({ date, role, company, achievements, isTextOnly = false })
 // --- Component: App ---
 const App = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+    // Image URLs for Hero section
+    const PROFILE_IMAGE_URL = "https://media.licdn.com/dms/image/v2/D5603AQG6ZRj_t8Vu4w/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1695688193659?e=1762387200&v=beta&t=LeF7pnfXLDbT8cPcyGDUSRRhxulA8HgSKY2NvWVfThQ";
+    // Fallback placeholder image URL
+    const FALLBACK_IMAGE_URL = "https://placehold.co/250x250/4c379a/ffffff?text=Dhaval";
+
+
+    // --- SCROLL ANIMATION LOGIC (Intersection Observer) ---
+    useEffect(() => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-visible');
+                    // This allows the animation to re-trigger when scrolling back up/down past the element
+                } else {
+                    entry.target.classList.remove('animate-visible');
+                }
+            });
+        }, {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1 // Triggers when 10% of the element is visible
+        });
+
+        // Find all elements marked for scroll animation
+        const elements = document.querySelectorAll('.scroll-animate');
+        elements.forEach(el => observer.observe(el));
+
+        return () => {
+            // Cleanup the observer when the component unmounts
+            elements.forEach(el => observer.unobserve(el));
+        };
+    }, []); // Empty dependency array ensures this runs only once after mount
 
     // Helper component for injecting the CSS
     const CssInjector = () => (
@@ -1063,7 +1169,7 @@ const App = () => {
                 <section id="hero" className="hero-section">
                     <div className="max-w-7xl">
                         <div className="hero-grid">
-                            <div className="hero-content">
+                            <div className="hero-content-text">
                                 <span className="hero-subtitle">Hello, I'm</span>
                                 <h1>Dhaval Parmar</h1>
                                 <p className="hero-title-role">Scrum Master & Software Engineer</p>
@@ -1073,16 +1179,23 @@ const App = () => {
                                 <div className="hero-actions">
                                     <a href="#contact" className="button-primary" onClick={(e) => handleNavClick(e, '#contact')}>
                                         Contact Me
-                                        <Icon name="arrow-right" className="ml-2 w-4 h-4" />
                                     </a>
-                                    <a href="/Dhaval-Parmar-Resume.pdf" target="_blank" rel="noopener noreferrer" className="button-secondary">
-                                        View Resume
+                                    <a href="#projects" className="button-secondary" onClick={(e) => handleNavClick(e, '#projects')}>
+                                        View Projects
                                     </a>
                                 </div>
                             </div>
-                            <div className="hero-image">
+                            <div className="hero-image-box">
                                 <div className="profile-graphic">
-                                    <Icon name="user" /> {/* Simple user icon placeholder */}
+                                    {/* Updated: Replaced Icon with the provided image URL */}
+                                    <img 
+                                        src={PROFILE_IMAGE_URL} 
+                                        alt="Dhaval Parmar - Professional Profile" 
+                                        onError={(e) => {
+                                            e.target.onerror = null; // Prevents infinite loop if fallback also fails
+                                            e.target.src = FALLBACK_IMAGE_URL; 
+                                        }}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -1092,27 +1205,27 @@ const App = () => {
                 {/* --- 2. About Section --- */}
                 <section id="about" className="about-section py-24">
                     <div className="max-w-7xl mx-auto">
-                        <div className="text-center mb-12">
+                        <div className="text-center mb-12 scroll-animate"> {/* ADDED scroll-animate class */}
                             <h2>About Me</h2>
                             <p className="section-title-tagline">My journey in Agile Leadership and Engineering.</p>
                         </div>
 
                         <div className="stat-grid">
-                            <div className="stat-card">
+                            <div className="stat-card scroll-animate"> {/* ADDED scroll-animate class */}
                                 <p className="stat-number">7+</p>
                                 <p className="stat-label">Years of Experience</p>
                             </div>
-                            <div className="stat-card">
+                            <div className="stat-card scroll-animate"> {/* ADDED scroll-animate class */}
                                 <p className="stat-number">30+</p>
                                 <p className="stat-label">Successful Projects</p>
                             </div>
-                            <div className="stat-card">
+                            <div className="stat-card scroll-animate"> {/* ADDED scroll-animate class */}
                                 <p className="stat-number">100%</p>
                                 <p className="stat-label">Agile Adoption Rate</p>
                             </div>
                         </div>
 
-                        <div className="summary-box">
+                        <div className="summary-box scroll-animate"> {/* ADDED scroll-animate class */}
                             <p className="summary-text">
                                 My career is a blend of technical expertise and strategic Agile leadership. As a Certified Scrum Master, I excel at coaching teams, facilitating ceremonies, and fostering a culture of continuous improvement. On the engineering side, I provide hands-on support in the development of robust, scalable applications using technologies like React, Node.js, and AWS. I bridge the gap between product vision and technical implementation, ensuring every sprint delivers maximum value.
                             </p>
@@ -1141,11 +1254,12 @@ const App = () => {
                 {/* --- 3. Projects/Domains Section --- */}
                 <section id="projects" className="domain-section">
                     <div className="max-w-7xl mx-auto">
-                        <div className="text-center mb-12">
+                        <div className="text-center mb-12 scroll-animate"> {/* ADDED scroll-animate class */}
                             <h2>Key Domains & Projects</h2>
                             <p className="section-title-tagline">Showcasing my work in scalable and dynamic web applications.</p>
                         </div>
                         <div className="domain-grid">
+                            {/* The ProjectCard component itself now includes the scroll-animate class */}
                             <ProjectCard
                                 title="Project Management Tools"
                                 iconName="zap"
@@ -1174,44 +1288,44 @@ const App = () => {
                 {/* --- 4. Skills Section --- */}
                 <section id="skills" className="skills-section py-24">
                     <div className="max-w-7xl mx-auto">
-                        <div className="text-center mb-12">
+                        <div className="text-center mb-12 scroll-animate"> {/* ADDED scroll-animate class */}
                             <h2>Technical & Agile Skills</h2>
                             <p className="section-title-tagline">My diverse skill set across leadership and technology.</p>
                         </div>
-                        <div className="skills-box">
+                        <div className="skills-box scroll-animate"> {/* ADDED scroll-animate class */}
                             <h3 className="skill-heading">Agile & Leadership</h3>
                             <div className="skill-grid">
-                                <div className="skill-item">
+                                <div className="skill-item scroll-animate"> {/* ADDED scroll-animate class to children for staggering */}
                                     <div className="skill-icon-container">
                                         <Icon name="briefcase" color="var(--primary-blue)" />
                                     </div>
                                     <p className="skill-name">Scrum Master</p>
                                 </div>
-                                <div className="skill-item">
+                                <div className="skill-item scroll-animate">
                                     <div className="skill-icon-container">
                                         <Icon name="list-checks" color="var(--primary-blue)" />
                                     </div>
                                     <p className="skill-name">Kanban</p>
                                 </div>
-                                <div className="skill-item">
+                                <div className="skill-item scroll-animate">
                                     <div className="skill-icon-container">
                                         <Icon name="users-2" color="var(--primary-blue)" />
                                     </div>
                                     <p className="skill-name">Team Coaching</p>
                                 </div>
-                                <div className="skill-item">
+                                <div className="skill-item scroll-animate">
                                     <div className="skill-icon-container">
                                         <Icon name="trello" color="var(--primary-blue)" />
                                     </div>
                                     <p className="skill-name">Jira/Confluence</p>
                                 </div>
-                                <div className="skill-item">
+                                <div className="skill-item scroll-animate">
                                     <div className="skill-icon-container">
                                         <Icon name="bar-chart-big" color="var(--primary-blue)" />
                                     </div>
                                     <p className="skill-name">Metrics</p>
                                 </div>
-                                <div className="skill-item">
+                                <div className="skill-item scroll-animate">
                                     <div className="skill-icon-container">
                                         <Icon name="layers-3" color="var(--primary-blue)" />
                                     </div>
@@ -1220,37 +1334,37 @@ const App = () => {
                             </div>
                             <h3 className="skill-heading mt-4">Development & Cloud</h3>
                             <div className="skill-grid">
-                                <div className="skill-item">
+                                <div className="skill-item scroll-animate">
                                     <div className="skill-icon-container">
                                         <Icon name="zap" color="var(--accent-light)" />
                                     </div>
                                     <p className="skill-name">React/JS</p>
                                 </div>
-                                <div className="skill-item">
+                                <div className="skill-item scroll-animate">
                                     <div className="skill-icon-container">
                                         <Icon name="rocket" color="var(--accent-light)" />
                                     </div>
                                     <p className="skill-name">Node.js</p>
                                 </div>
-                                <div className="skill-item">
+                                <div className="skill-item scroll-animate">
                                     <div className="skill-icon-container">
                                         <Icon name="cloud" color="var(--accent-light)" />
                                     </div>
                                     <p className="skill-name">AWS</p>
                                 </div>
-                                <div className="skill-item">
+                                <div className="skill-item scroll-animate">
                                     <div className="skill-icon-container">
                                         <Icon name="drafting-compass" color="var(--accent-light)" />
                                     </div>
                                     <p className="skill-name">Microservices</p>
                                 </div>
-                                <div className="skill-item">
+                                <div className="skill-item scroll-animate">
                                     <div className="skill-icon-container">
                                         <Icon name="git-branch" color="var(--accent-light)" />
                                     </div>
                                     <p className="skill-name">Git/CI/CD</p>
                                 </div>
-                                <div className="skill-item">
+                                <div className="skill-item scroll-animate">
                                     <div className="skill-icon-container">
                                         <Icon name="target" color="var(--accent-light)" />
                                     </div>
@@ -1264,7 +1378,7 @@ const App = () => {
                 {/* --- 5. Experience Timeline --- */}
                 <section id="experience" className="experience-section py-24">
                     <div className="max-w-7xl mx-auto">
-                        <div className="text-center mb-12">
+                        <div className="text-center mb-12 scroll-animate"> {/* ADDED scroll-animate class */}
                             <h2>Professional Experience</h2>
                             <p className="section-title-tagline">My journey across technology and leadership roles.</p>
                         </div>
@@ -1272,6 +1386,7 @@ const App = () => {
                         <div className="timeline-container">
                             <div className="timeline-line"></div>
 
+                            {/* TimelineItem component itself now ensures its internal content animates */}
                             <TimelineItem
                                 date="2020 - Present"
                                 role="Senior Scrum Master & Full-Stack Engineer"
@@ -1312,12 +1427,12 @@ const App = () => {
                 {/* --- 6. Certifications Section --- */}
                 <section id="certifications" className="cert-section py-24">
                     <div className="max-w-7xl mx-auto">
-                        <div className="text-center mb-12">
+                        <div className="text-center mb-12 scroll-animate"> {/* ADDED scroll-animate class */}
                             <h2>Certifications & Education</h2>
                             <p className="section-title-tagline">Formal training and academic background.</p>
                         </div>
                         <div className="cert-grid">
-                            <div className="cert-card">
+                            <div className="cert-card scroll-animate"> {/* ADDED scroll-animate class */}
                                 <div className="cert-icon-container cert-icon-accent">
                                     <Icon name="award" />
                                 </div>
@@ -1326,7 +1441,7 @@ const App = () => {
                                     <p className="cert-subtitle">Scrum Alliance, 2021</p>
                                 </div>
                             </div>
-                            <div className="cert-card">
+                            <div className="cert-card scroll-animate"> {/* ADDED scroll-animate class */}
                                 <div className="cert-icon-container cert-icon-blue">
                                     <Icon name="file-text" />
                                 </div>
@@ -1335,7 +1450,7 @@ const App = () => {
                                     <p className="cert-subtitle">Amazon Web Services, 2022</p>
                                 </div>
                             </div>
-                            <div className="cert-card">
+                            <div className="cert-card scroll-animate"> {/* ADDED scroll-animate class */}
                                 <div className="cert-icon-container cert-icon-accent">
                                     <Icon name="award" />
                                 </div>
@@ -1344,7 +1459,7 @@ const App = () => {
                                     <p className="cert-subtitle">Scrum.org, 2023</p>
                                 </div>
                             </div>
-                            <div className="cert-card">
+                            <div className="cert-card scroll-animate"> {/* ADDED scroll-animate class */}
                                 <div className="cert-icon-container cert-icon-blue">
                                     <Icon name="file-text" />
                                 </div>
@@ -1360,13 +1475,13 @@ const App = () => {
                 {/* --- 7. Contact Section --- */}
                 <section id="contact" className="contact-section py-24">
                     <div className="max-w-7xl mx-auto">
-                        <div className="text-center mb-12">
+                        <div className="text-center mb-12 scroll-animate"> {/* ADDED scroll-animate class */}
                             <h2>Get In Touch</h2>
                             <p className="section-title-tagline">Let's build something great together. I am actively looking for new opportunities.</p>
                         </div>
                         <div className="contact-grid">
                             {/* Contact Card: Email */}
-                            <div className="contact-card accent">
+                            <div className="contact-card accent scroll-animate"> {/* ADDED scroll-animate class */}
                                 <div className="contact-icon">
                                     <Icon name="mail" />
                                 </div>
@@ -1375,7 +1490,7 @@ const App = () => {
                             </div>
 
                             {/* Contact Card: Phone */}
-                            <div className="contact-card blue">
+                            <div className="contact-card blue scroll-animate"> {/* ADDED scroll-animate class */}
                                 <div className="contact-icon">
                                     <Icon name="phone" />
                                 </div>
@@ -1384,7 +1499,7 @@ const App = () => {
                             </div>
 
                             {/* Contact Card: Location */}
-                            <div className="contact-card accent">
+                            <div className="contact-card accent scroll-animate"> {/* ADDED scroll-animate class */}
                                 <div className="contact-icon">
                                     <Icon name="map-pin" />
                                 </div>
