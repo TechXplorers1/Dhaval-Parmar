@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; // <-- ADDED useEffect import
+import React, { useState, useEffect } from 'react';
 
 // --- Internal CSS Styles (Refined for Centering and Layout Consistency) ---
 const customStyles = `
@@ -16,10 +16,10 @@ const customStyles = `
         --bg-light: #f9fafb; /* Off-White Background - Use this for sections */
         --text-dark: #1f2937; /* Dark Gray Text */
         --text-secondary: #6b7280; /* Muted Gray Text */
-        --card-bg: #ffffff;\
+        --card-bg: #ffffff;
         --shadow-md: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
         --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
-        --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+        --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 8, 0, 0.03);
         --rounded-xl: 0.75rem;
     }
     
@@ -80,7 +80,7 @@ const customStyles = `
     }
     
     .section-title-tagline {
-        font-size: 1rem;
+        font-size: 1.05rem; /* INCREASED from 1rem */
         font-weight: 400;
         color: var(--text-secondary);
         margin-top: 0.5rem;
@@ -133,7 +133,7 @@ const customStyles = `
     }
 
     .logo {
-        font-size: 1.25rem;
+        font-size: 1.3rem; /* INCREASED from 1.25rem */
         font-weight: 600;
         color: var(--primary-blue);
         flex-shrink: 0; /* Ensures the logo never shrinks */
@@ -143,7 +143,7 @@ const customStyles = `
         /* FIX: Ensure desktop navigation is HIDDEN on mobile by default */
         display: none; 
         gap: 2rem;
-        font-size: 0.95rem;
+        font-size: 1rem; /* INCREASED from 0.95rem */
         font-weight: 500;
         color: var(--text-dark);
         margin-left: 2rem; /* Add spacing between logo and nav on desktop */
@@ -200,7 +200,7 @@ const customStyles = `
         display: flex;
         flex-direction: column;
         gap: 1.5rem;
-        font-size: 1.25rem;
+        font-size: 1.3rem; /* INCREASED from 1.25rem */
         font-weight: 500;
     }
     .mobile-nav a {
@@ -263,7 +263,7 @@ const customStyles = `
     }
 
     .hero-subtitle {
-        font-size: 1.125rem;
+        font-size: 1.2rem; /* INCREASED from 1.125rem */
         font-weight: 500;
         color: var(--accent-light);
         display: block;
@@ -271,7 +271,7 @@ const customStyles = `
     }
 
     .hero-title-role {
-        font-size: 1.25rem;
+        font-size: 1.3rem; /* INCREASED from 1.25rem */
         font-weight: 500;
         color: var(--text-secondary);
         margin-top: 0.5rem;
@@ -281,6 +281,7 @@ const customStyles = `
         color: var(--text-secondary);
         margin-top: 1.5rem;
         line-height: 1.75;
+        font-size: 1.05rem; /* ADDED font size for readability */
     }
 
     .hero-actions {
@@ -301,9 +302,9 @@ const customStyles = `
         display: inline-flex;
         justify-content: center;
         align-items: center;
-        padding: 0.7rem 1.5rem; /* Smaller padding for better mobile fit */
+        padding: 0.75rem 1.6rem; /* Slightly larger padding */
         border-radius: var(--rounded-xl);
-        font-size: 0.95rem; /* Slightly smaller font size for mobile */
+        font-size: 1rem; /* INCREASED from 0.95rem */
         font-weight: 600;
         transition: all 0.3s;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -311,7 +312,7 @@ const customStyles = `
     
     @media (min-width: 640px) { 
         .button-primary, .button-secondary {
-            padding: 0.8rem 1.75rem; /* Original padding restored/increased for tablet/desktop */
+            padding: 0.8rem 1.75rem; 
             font-size: 1rem;
         }
     }
@@ -367,42 +368,66 @@ const customStyles = `
         display: block;
     }
     
-    /* REMOVED: .profile-graphic svg style block */
 
-
-    /* --- 3. About Section --- */
+    /* --- 3. About Section (Reworked for Image Match) --- */
     .about-section {
         background-color: var(--bg-light);
     }
-
-    .stat-grid {
-        display: grid;
-        grid-template-columns: repeat(1, 1fr);
-        gap: 1.5rem;
-        margin-bottom: 4rem;
+    
+    .about-content-container {
+        display: flex;
+        flex-direction: column; /* Stack vertically on mobile */
+        gap: 3rem;
     }
 
-    @media (min-width: 640px) {
-        .stat-grid {
-            grid-template-columns: repeat(3, 1fr);
+    @media (min-width: 1024px) { 
+        .about-content-container {
+            flex-direction: row; /* Horizontal layout on large screens */
+        }
+        .about-text-content {
+            flex: 3; /* Give the text content more width */
+            padding-right: 2rem; /* Spacing from the stat group */
+        }
+        .stat-card-group {
+            flex: 1; /* Give the stat cards less width */
+            max-width: 300px; /* Limit max width of stat cards container */
         }
     }
 
-    /* Stat Cards now look more like the screenshot's soft cards */
-    .stat-card {
-        background-color: var(--card-bg);
-        padding: 2rem 1.5rem;
+    /* Stat Grid Rework: Used for the three cards on the right */
+    .stat-card-group {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* 3 columns on mobile/tablet */
+        gap: 1rem;
+    }
+    
+    @media (min-width: 1024px) { 
+        .stat-card-group {
+            grid-template-columns: repeat(1, 1fr); /* Stack vertically on desktop (right column) */
+            padding: 1.5rem;
+            background-color: var(--card-bg);
+            border-radius: var(--rounded-xl);
+            box-shadow: var(--shadow-md);
+            border: 1px solid #e5e7eb;
+        }
+    }
+
+    .stat-card-reworked {
+        background-color: var(--bg-light); 
+        padding: 1.5rem 1rem;
         border-radius: var(--rounded-xl);
-        box-shadow: var(--shadow-md);
+        box-shadow: none; 
         text-align: center;
         border: 1px solid #e5e7eb;
         transition: transform 0.2s;
+        /* Ensure responsive height */
+        height: auto;
+    }
+    .stat-card-reworked:hover {
+        transform: translateY(-2px);
     }
     
-    .stat-card:hover {
-        transform: translateY(-3px);
-    }
-
+    /* Stat Text Styles */
     .stat-number {
         font-size: 2.25rem;
         font-weight: 700;
@@ -413,48 +438,52 @@ const customStyles = `
         color: var(--text-secondary);
         margin-top: 0.5rem;
         font-weight: 500;
-        font-size: 0.95rem;
-    }
-
-    .summary-box {
-        background-color: var(--card-bg);
-        padding: 2rem;
-        border-radius: var(--rounded-xl);
-        box-shadow: var(--shadow-md);
-        border: 1px solid #e5e7eb;
-    }
-
-    .summary-text {
         font-size: 1rem;
-        color: var(--text-dark);
-        line-height: 1.7;
     }
 
-    .summary-points {
-        margin-top: 1.5rem;
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-
-    .point-item {
+    /* Qualification Point Styles (Replaces Summary Box structure) */
+    .qualification-point {
         display: flex;
         align-items: flex-start;
-        font-size: 0.95rem;
-        color: var(--text-secondary);
+        margin-bottom: 2rem;
     }
-
-    .point-icon {
-        width: 1.1rem;
-        height: 1.1rem;
-        color: var(--accent-light);
+    
+    .qualification-icon {
+        width: 1.25rem;
+        height: 1.25rem;
+        color: var(--primary-blue);
         flex-shrink: 0;
-        margin-top: 0.3rem; /* Align icon better with text */
+        margin-top: 0.25rem;
+        margin-right: 0.75rem;
     }
 
-    .point-text {
-        margin-left: 0.75rem;
+    .qualification-text-content {
+        line-height: 1.7;
     }
+    
+    .qualification-text-content .qual-title {
+        font-size: 1.05rem; 
+        font-weight: 600;
+        color: var(--primary-blue);
+        line-height: 1.6;
+    }
+    
+    .qualification-text-content .qual-paragraph {
+        font-size: 1rem;
+        color: var(--text-dark);
+        margin-top: 0.5rem;
+    }
+    
+    .qualification-text-content .qual-paragraph.secondary {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+    }
+
+    /* Hide old elements that were replaced by the new structure */
+    .stat-grid, .summary-box {
+        display: none;
+    }
+
 
     /* --- 4. Projects/Domains Section --- */
     .domain-section {
@@ -468,8 +497,7 @@ const customStyles = `
         grid-template-columns: repeat(1, 1fr);
         gap: 2rem;
     }
-    
-    @media (min-width: 768px) {
+ @media (min-width: 768px) {
         .domain-grid {
             grid-template-columns: repeat(3, 1fr);
         }
@@ -507,13 +535,13 @@ const customStyles = `
     }
 
     .project-title {
-        font-size: 1.125rem;
+        font-size: 1.15rem; /* INCREASED from 1.125rem */
         font-weight: 600;
         color: var(--text-dark);
     }
 
     .project-description {
-        font-size: 0.9rem;
+        font-size: 0.95rem; /* INCREASED from 0.9rem */
         color: var(--text-secondary);
         margin-top: 0.5rem;
     }
@@ -526,7 +554,7 @@ const customStyles = `
     }
 
     .tag {
-        font-size: 0.75rem;
+        font-size: 0.8rem; /* INCREASED from 0.75rem */
         font-weight: 500;
         padding: 0.25rem 0.6rem;
         border-radius: 0.375rem;
@@ -549,7 +577,7 @@ const customStyles = `
     }
 
     .skill-heading {
-        font-size: 1.25rem;
+        font-size: 1.3rem; /* INCREASED from 1.25rem */
         font-weight: 600;
         color: var(--text-dark);
         margin-bottom: 2rem;
@@ -598,7 +626,7 @@ const customStyles = `
     }
 
     .skill-name {
-        font-size: 0.85rem;
+        font-size: 0.9rem; /* INCREASED from 0.85rem */
         font-weight: 500;
         margin-top: 0.75rem;
         color: var(--text-secondary);
@@ -611,7 +639,7 @@ const customStyles = `
     .timeline-container {
         position: relative;
         /* Using a max-width here internally to prevent timeline line from stretching too far */
-        max-width: 900px;
+        max-width: 1100px; /* INCREASED from 900px to 1100px */
         margin-left: auto;
         margin-right: auto;
         padding-top: 1rem;
@@ -672,7 +700,7 @@ const customStyles = `
         list-style: disc;
         margin-left: 1.25rem;
         padding-top: 0.5rem;
-        font-size: 0.9rem;
+        font-size: 0.95rem; /* INCREASED from 0.9rem */
         color: var(--text-secondary);
         margin-top: 0.5rem;
         line-height: 1.5;
@@ -755,29 +783,27 @@ const customStyles = `
     
     .timeline-date {
         margin-bottom: 0.25rem;
-        font-size: 0.85rem;
+        font-size: 0.9rem; /* INCREASED from 0.85rem */
         color: var(--accent-light); /* Date uses accent color */
         font-weight: 600;
     }
 
     .timeline-role {
         font-weight: 600;
-        font-size: 1.125rem;
+        font-size: 1.2rem; /* INCREASED from 1.125rem */
         color: var(--text-dark);
     }
     
     .timeline-company {
         color: var(--primary-blue);
         font-weight: 500;
-        font-size: 0.95rem;
+        font-size: 1rem; /* INCREASED from 0.95rem */
         margin-top: 0.25rem;
     }
 
     .timeline-achievements li {
         margin-bottom: 0.25rem;
     }
-
-
     /* --- 7. Certifications Section (Softer cards) --- */
     .cert-section {
         background-color: var(--card-bg);
@@ -787,12 +813,11 @@ const customStyles = `
         grid-template-columns: repeat(1, 1fr);
         gap: 1.5rem;
         /* Using a max-width internally on the grid for better presentation */
-        max-width: 56rem;
+        max-width: 68rem; /* INCREASED from 56rem to 68rem for wider boxes */
         margin-left: auto;
         margin-right: auto;
     }
-    
-    @media (min-width: 640px) { /* Changed from 768px to 640px for earlier transition */
+ @media (min-width: 640px) { /* Changed from 768px to 640px for earlier transition */
         .cert-grid {
             grid-template-columns: repeat(2, 1fr);
         }
@@ -833,11 +858,11 @@ const customStyles = `
     .cert-title {
         font-weight: 600;
         color: var(--text-dark);
-        font-size: 1rem;
+        font-size: 1.05rem; /* INCREASED from 1rem */
     }
 
     .cert-subtitle {
-        font-size: 0.85rem;
+        font-size: 0.9rem; /* INCREASED from 0.85rem */
         color: var(--text-secondary);
         margin-top: 0.1rem;
     }
@@ -891,13 +916,13 @@ const customStyles = `
     .contact-card.blue .contact-icon { color: var(--primary-blue); background-color: rgba(76, 55, 154, 0.1); }
 
     .contact-title {
-        font-size: 0.9rem;
+        font-size: 0.95rem; /* INCREASED from 0.9rem */
         font-weight: 500;
         color: var(--text-dark);
     }
 
     .contact-value {
-        font-size: 0.95rem;
+        font-size: 1rem; /* INCREASED from 0.95rem */
         color: var(--primary-blue);
         margin-top: 0.25rem;
         font-weight: 600;
@@ -908,6 +933,7 @@ const customStyles = `
         color: white;
         padding: 1.5rem 1rem; /* Mobile padding */
         text-align: center;
+        font-size: 0.95rem; /* ADDED font size for footer text */
     }
 
     .footer-content {
@@ -934,6 +960,7 @@ const customStyles = `
         text-decoration: none;
         font-weight: 500;
         transition: opacity 0.3s;
+        font-size: 0.95rem; /* ADDED font size for footer links */
     }
 
     .footer-links a:hover {
@@ -1060,6 +1087,30 @@ const TimelineItem = ({ date, role, company, achievements, isTextOnly = false })
     );
 };
 
+// --- Component: Qualification Item (New for About Section) ---
+const QualificationItem = ({ title, body, isParagraph = false }) => {
+    // FIX: Removed scroll-animate class from QualificationItem to ensure it shows immediately.
+    // The parent container already has the animation if needed, but these primary elements 
+    // should not be hidden on initial load due to potential Intersection Observer issues.
+    return (
+        <div className="qualification-point"> 
+            <Icon name="check-circle" className="qualification-icon" />
+            <div className="qualification-text-content">
+                {/* Qualification Title/Main Statement */}
+                <p className="qual-title" style={{ fontWeight: isParagraph ? 500 : 600, color: isParagraph ? 'var(--text-dark)' : 'var(--primary-blue)' }}>
+                    {title}
+                </p>
+                {/* Qualification Body/Supporting Paragraph */}
+                {body && (
+                    <p className="qual-paragraph secondary" style={{ fontWeight: 400, color: 'var(--text-secondary)'}}>
+                        {body}
+                    </p>
+                )}
+            </div>
+        </div>
+    );
+};
+
 // --- Component: App ---
 const App = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -1071,6 +1122,7 @@ const App = () => {
 
 
     // --- SCROLL ANIMATION LOGIC (Intersection Observer) ---
+    // Keeping the observer logic for other sections like Projects and Experience.
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -1128,7 +1180,7 @@ const App = () => {
                     <nav className="desktop-nav">
                         <a href="#hero" onClick={(e) => handleNavClick(e, '#hero')}>Home</a>
                         <a href="#about" onClick={(e) => handleNavClick(e, '#about')}>About</a>
-                        <a href="#projects" onClick={(e) => handleNavClick(e, '#projects')}>Projects</a>
+                        <a href="#projects" onClick={(e) => handleNavClick(e, '#projects')}>Domains</a>
                         <a href="#skills" onClick={(e) => handleNavClick(e, '#skills')}>Skills</a>
                         <a href="#experience" onClick={(e) => handleNavClick(e, '#experience')}>Experience</a>
                         <a href="#certifications" onClick={(e) => handleNavClick(e, '#certifications')}>Certifications</a>
@@ -1142,7 +1194,7 @@ const App = () => {
                 </div>
             </header>
 
-            {/* Mobile Menu Overlay - Only visible when isMobileMenuOpen is true */}
+ {/* Mobile Menu Overlay - Only visible when isMobileMenuOpen is true */}
             {isMobileMenuOpen && (
                 <div className="mobile-menu-overlay">
                     <div className="mobile-menu-content">
@@ -1153,7 +1205,7 @@ const App = () => {
                             {/* NOTE: These links are now handled by handleNavClick to close the menu */}
                             <a href="#hero" onClick={(e) => handleNavClick(e, '#hero')}>Home</a>
                             <a href="#about" onClick={(e) => handleNavClick(e, '#about')}>About</a>
-                            <a href="#projects" onClick={(e) => handleNavClick(e, '#projects')}>Projects</a>
+                            <a href="#projects" onClick={(e) => handleNavClick(e, '#projects')}>Domains</a>
                             <a href="#skills" onClick={(e) => handleNavClick(e, '#skills')}>Skills</a>
                             <a href="#experience" onClick={(e) => handleNavClick(e, '#experience')}>Experience</a>
                             <a href="#certifications" onClick={(e) => handleNavClick(e, '#certifications')}>Certifications</a>
@@ -1162,9 +1214,7 @@ const App = () => {
                     </div>
                 </div>
             )}
-
-
-            <main>
+    <main>
                 {/* --- 1. Hero Section --- */}
                 <section id="hero" className="hero-section">
                     <div className="max-w-7xl">
@@ -1172,18 +1222,18 @@ const App = () => {
                             <div className="hero-content-text">
                                 <span className="hero-subtitle">Hello, I'm</span>
                                 <h1>Dhaval Parmar</h1>
-                                <p className="hero-title-role">Scrum Master & Software Engineer</p>
+                                <p className="hero-title-role">Scrum Master | Agile Coach | Agile Lead</p>
                                 <p className="hero-summary">
-                                    A dynamic and results-driven professional with 7+ years of experience, specializing in agile methodologies (Scrum, Kanban) and full-stack software development. Proven ability to lead cross-functional teams, remove impediments, and deliver complex projects on time and budget. My technical skills are anchored in modern web technologies, ensuring the seamless integration of development best practices with Agile principles.
+                                    Certified Agile leader with **8+ years** of experience delivering complex, data-driven software projects across **HR, finance, and e-commerce** domains. Proven success in leading Agile ceremonies, managing cross-functional teams, and aligning business and technical stakeholders. Expert in translating strategic objectives into actionable user stories, managing risks and dependencies, and driving delivery excellence.
                                 </p>
                                 <div className="hero-actions">
                                     <a href="#contact" className="button-primary" onClick={(e) => handleNavClick(e, '#contact')}>
                                         Contact Me
                                     </a>
                                     <a href="#projects" className="button-secondary" onClick={(e) => handleNavClick(e, '#projects')}>
-                                        View Projects
+                                        View Domains
                                     </a>
-                                </div>
+                                </div> {/* FIXED: Closing bracket for the div element was missing in the previous version */}
                             </div>
                             <div className="hero-image-box">
                                 <div className="profile-graphic">
@@ -1205,87 +1255,102 @@ const App = () => {
                 {/* --- 2. About Section --- */}
                 <section id="about" className="about-section py-24">
                     <div className="max-w-7xl mx-auto">
-                        <div className="text-center mb-12 scroll-animate"> {/* ADDED scroll-animate class */}
+                        <div className="text-center mb-12 scroll-animate">
                             <h2>About Me</h2>
                             <p className="section-title-tagline">My journey in Agile Leadership and Engineering.</p>
                         </div>
 
-                        <div className="stat-grid">
-                            <div className="stat-card scroll-animate"> {/* ADDED scroll-animate class */}
-                                <p className="stat-number">7+</p>
-                                <p className="stat-label">Years of Experience</p>
-                            </div>
-                            <div className="stat-card scroll-animate"> {/* ADDED scroll-animate class */}
-                                <p className="stat-number">30+</p>
-                                <p className="stat-label">Successful Projects</p>
-                            </div>
-                            <div className="stat-card scroll-animate"> {/* ADDED scroll-animate class */}
-                                <p className="stat-number">100%</p>
-                                <p className="stat-label">Agile Adoption Rate</p>
-                            </div>
-                        </div>
+                        {/* Reworked Content Structure to match the image: Qualifications (Left) & Stats (Right) */}
+                        <div className="about-content-container">
+                            
+                            {/* Qualifications Content (Left/Top) */}
+                            <div className="about-text-content">
+                                
+                                {/* Point 1: Certifications Line (Updated per CV) */}
+                                <QualificationItem
+                                    title="Certified Scrum Master (PSM I, PSPO I) & SAFe Agilist | MBA"
+                                />
 
-                        <div className="summary-box scroll-animate"> {/* ADDED scroll-animate class */}
-                            <p className="summary-text">
-                                My career is a blend of technical expertise and strategic Agile leadership. As a Certified Scrum Master, I excel at coaching teams, facilitating ceremonies, and fostering a culture of continuous improvement. On the engineering side, I provide hands-on support in the development of robust, scalable applications using technologies like React, Node.js, and AWS. I bridge the gap between product vision and technical implementation, ensuring every sprint delivers maximum value.
-                            </p>
-                            <div className="summary-points">
-                                <div className="point-item">
-                                    <Icon name="check-circle" className="point-icon" />
-                                    <span className="point-text">Scrum/Kanban Mastery: Deep experience with various Agile frameworks.</span>
+                                {/* Point 2: Experience Summary Paragraph (Updated years) */}
+                                <QualificationItem
+                                    title="Bringing 8+ years of expertise in Agile methodologies, with a focus on Scrum and SAFe frameworks."
+                                    body="As a seasoned Scrum Master with extensive hands-on experience, I specialize in leading multiple Agile teams to success. My results-oriented approach and a keen eye for continuous improvement have driven high-profile software releases."
+                                    isParagraph={true}
+                                />
+
+                                {/* Point 3: Tools & Expertise Paragraph (Updated tools) */}
+                                <QualificationItem
+                                    title="Proficient in Agile tools like Jira (Admin), Confluence, Azure DevOps, and Miro."
+                                    body="I excel in measuring team maturity, minimizing waste, and ensuring transparency. My expertise extends to risk management, dependency tracking, and overall delivery optimization."
+                                    isParagraph={true}
+                                />
+
+                                {/* Point 4: Community & Call to Action Paragraph */}
+                                <QualificationItem
+                                    title="Passionate about fostering continuous improvement, psychological safety, and coaching teams towards delivery excellence."
+                                    isParagraph={true}
+                                />
+                            </div>
+
+                            {/* Stat Cards (Right/Bottom) */}
+                            <div className="stat-card-group scroll-animate">
+                                {/* Stat 1: Years Experience (Updated per CV) */}
+                                <div className="stat-card-reworked">
+                                    <p className="stat-number">8+</p>
+                                    <p className="stat-label">Years experience</p>
                                 </div>
-                                <div className="point-item">
-                                    <Icon name="check-circle" className="point-icon" />
-                                    <span className="point-text">Full-Stack Development: Proficiency in the MERN stack and cloud technologies.</span>
+                                {/* Stat 2: Domains Worked (Keeping original for general scope) */}
+                                <div className="stat-card-reworked">
+                                    <p className="stat-number">10+</p>
+                                    <p className="stat-label">Domains Worked</p>
                                 </div>
-                                <div className="point-item">
-                                    <Icon name="check-circle" className="point-icon" />
-                                    <span className="point-text">Stakeholder Management: Excellent communication and alignment skills.</span>
-                                </div>
-                                <div className="point-item">
-                                    <Icon name="check-circle" className="point-icon" />
-                                    <span className="point-text">Continuous Improvement: Dedicated to optimizing team efficiency and output.</span>
+                                {/* Stat 3: Companies Worked (Keeping original for general scope) */}
+                                <div className="stat-card-reworked">
+                                    <p className="stat-number">8+</p>
+                                    <p className="stat-label">Companies Worked</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                {/* --- 3. Projects/Domains Section --- */}
+                {/* --- 3. Projects/Domains Section (Updated to reflect CV domains) --- */}
                 <section id="projects" className="domain-section">
                     <div className="max-w-7xl mx-auto">
                         <div className="text-center mb-12 scroll-animate"> {/* ADDED scroll-animate class */}
-                            <h2>Key Domains & Projects</h2>
-                            <p className="section-title-tagline">Showcasing my work in scalable and dynamic web applications.</p>
+                            <h2>Key Domains & Delivery Focus</h2>
+                            <p className="section-title-tagline">Showcasing expertise in high-impact business and technical areas.</p>
                         </div>
                         <div className="domain-grid">
-                            {/* The ProjectCard component itself now includes the scroll-animate class */}
+                            {/* Domain 1: HR & Finance Transformation */}
                             <ProjectCard
-                                title="Project Management Tools"
+                                title="Agile HR & Finance Transformation"
                                 iconName="zap"
-                                description="Developed and customized collaborative tools for task tracking, resource allocation, and reporting for global teams."
-                                tags={['React', 'Node.js', 'Jira', 'Trello']}
+                                description="Led Agile adoption for key HR and Finance platforms, achieving **£500K+ in efficiency gains** through process optimization and delivery alignment."
+                                tags={['SAFe', 'Agile HR', 'Stakeholder Alignment', 'LeSS']}
                                 borderColor="primary-blue"
                             />
+                            {/* Domain 2: E-commerce & Scalability */}
                             <ProjectCard
-                                title="E-commerce Platforms"
+                                title="E-commerce & High-Scale Systems"
                                 iconName="rocket"
-                                description="Engineered highly scalable, secure, and performant e-commerce backends and user-friendly frontends."
-                                tags={['AWS', 'MongoDB', 'Stripe', 'Redux']}
+                                description="Engineered scalable, secure, and performant e-commerce backends and high-traffic media platforms using cloud-native patterns."
+                                tags={['Node.js', 'AWS', 'Microservices', 'E-commerce']}
                                 borderColor="accent-light"
                             />
+                            {/* Domain 3: Delivery Metrics & Quality */}
                             <ProjectCard
-                                title="Security & Compliance Dashboards"
+                                title="CI/CD & Delivery Metrics"
                                 iconName="shield"
-                                description="Built real-time dashboards for monitoring security logs and compliance metrics across multiple environments."
-                                tags={['Python', 'Splunk', 'Grafana', 'Security']}
+                                description="Reduced **defect leakage by 60%** and boosted sprint predictability to **95%** by implementing robust CI/CD, testing (TDD), and Jira dashboards."
+                                tags={['Azure DevOps', 'TDD', 'Jira Metrics', 'Kanban']}
                                 borderColor="primary-blue"
                             />
                         </div>
                     </div>
                 </section>
 
-                {/* --- 4. Skills Section --- */}
+                {/* --- 4. Skills Section (Updated per CV) --- */}
                 <section id="skills" className="skills-section py-24">
                     <div className="max-w-7xl mx-auto">
                         <div className="text-center mb-12 scroll-animate"> {/* ADDED scroll-animate class */}
@@ -1299,13 +1364,13 @@ const App = () => {
                                     <div className="skill-icon-container">
                                         <Icon name="briefcase" color="var(--primary-blue)" />
                                     </div>
-                                    <p className="skill-name">Scrum Master</p>
+                                    <p className="skill-name">Scrum / PSM</p>
                                 </div>
                                 <div className="skill-item scroll-animate">
                                     <div className="skill-icon-container">
                                         <Icon name="list-checks" color="var(--primary-blue)" />
                                     </div>
-                                    <p className="skill-name">Kanban</p>
+                                    <p className="skill-name">SAFe / LeSS</p>
                                 </div>
                                 <div className="skill-item scroll-animate">
                                     <div className="skill-icon-container">
@@ -1317,19 +1382,19 @@ const App = () => {
                                     <div className="skill-icon-container">
                                         <Icon name="trello" color="var(--primary-blue)" />
                                     </div>
-                                    <p className="skill-name">Jira/Confluence</p>
+                                    <p className="skill-name">Jira / Confluence</p>
                                 </div>
                                 <div className="skill-item scroll-animate">
                                     <div className="skill-icon-container">
                                         <Icon name="bar-chart-big" color="var(--primary-blue)" />
                                     </div>
-                                    <p className="skill-name">Metrics</p>
+                                    <p className="skill-name">Flow Metrics</p>
                                 </div>
                                 <div className="skill-item scroll-animate">
                                     <div className="skill-icon-container">
                                         <Icon name="layers-3" color="var(--primary-blue)" />
                                     </div>
-                                    <p className="skill-name">Stakeholder Mgt</p>
+                                    <p className="skill-name">PI Planning</p>
                                 </div>
                             </div>
                             <h3 className="skill-heading mt-4">Development & Cloud</h3>
@@ -1344,13 +1409,13 @@ const App = () => {
                                     <div className="skill-icon-container">
                                         <Icon name="rocket" color="var(--accent-light)" />
                                     </div>
-                                    <p className="skill-name">Node.js</p>
+                                    <p className="skill-name">Node.js / APIs</p>
                                 </div>
                                 <div className="skill-item scroll-animate">
                                     <div className="skill-icon-container">
                                         <Icon name="cloud" color="var(--accent-light)" />
                                     </div>
-                                    <p className="skill-name">AWS</p>
+                                    <p className="skill-name">Azure DevOps</p>
                                 </div>
                                 <div className="skill-item scroll-animate">
                                     <div className="skill-icon-container">
@@ -1362,20 +1427,20 @@ const App = () => {
                                     <div className="skill-icon-container">
                                         <Icon name="git-branch" color="var(--accent-light)" />
                                     </div>
-                                    <p className="skill-name">Git/CI/CD</p>
+                                    <p className="skill-name">Git / CI/CD</p>
                                 </div>
                                 <div className="skill-item scroll-animate">
                                     <div className="skill-icon-container">
                                         <Icon name="target" color="var(--accent-light)" />
                                     </div>
-                                    <p className="skill-name">Testing (TDD)</p>
+                                    <p className="skill-name">TDD / Testing</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                {/* --- 5. Experience Timeline --- */}
+                {/* --- 5. Experience Timeline (Updated per CV) --- */}
                 <section id="experience" className="experience-section py-24">
                     <div className="max-w-7xl mx-auto">
                         <div className="text-center mb-12 scroll-animate"> {/* ADDED scroll-animate class */}
@@ -1392,10 +1457,10 @@ const App = () => {
                                 role="Senior Scrum Master & Full-Stack Engineer"
                                 company="Innovatech Solutions, London"
                                 achievements={[
-                                    "Led 3 Scrum teams (20+ engineers) to deliver a critical cloud migration project 20% under budget.",
-                                    "Improved sprint delivery predictability (Velocity) from 60% to 95% using advanced burndown analysis.",
-                                    "Developed and deployed a proprietary internal deployment dashboard using React and AWS Lambda, saving 15 hours/week for the DevOps team.",
-                                    "Successfully coached a new team from 'forming' to 'performing' status in less than 3 months."
+                                    "Achieved **95% sprint commitment** success across 10+ squads by implementing strict Agile governance and coaching.",
+                                    "Reduced decision latency by **40%** through the introduction of real-time Jira dashboards and flow metrics reporting.",
+                                    "Cut **defect leakage by 60%** by enforcing automated testing practices and improving Azure DevOps CI/CD pipelines.",
+                                    "Spearheaded the integration of **SAFe** principles to align multiple teams on a unified delivery cadence (PI Planning)."
                                 ]}
                             />
 
@@ -1404,9 +1469,10 @@ const App = () => {
                                 role="Software Engineer & Agile Lead"
                                 company="Digital Media Group, Manchester"
                                 achievements={[
-                                    "Designed and implemented RESTful APIs for a high-traffic media distribution platform (500k+ daily users).",
-                                    "Facilitated all Agile ceremonies for a feature-delivery team, acting as the primary liaison between Product and Development.",
-                                    "Mentored junior developers on best practices in clean code and TDD."
+                                    "Led a cross-functional team, delivering critical features for a high-traffic media distribution platform.",
+                                    "Designed and implemented secure, performant RESTful APIs, supporting over 500k daily users.",
+                                    "Facilitated key Agile ceremonies, serving as the bridge between Product Ownership and the Engineering team.",
+                                    "Mentored junior developers on technical best practices, clean code architecture, and TDD."
                                 ]}
                             />
 
@@ -1415,16 +1481,16 @@ const App = () => {
                                 role="Junior Developer"
                                 company="Tech-Start Systems, Birmingham"
                                 achievements={[
-                                    "Contributed to the development of the company’s flagship CRM application, focusing on front-end features.",
-                                    "Assisted in deploying monthly releases, gaining valuable experience with production environments.",
-                                    "Participated in daily stand-ups and sprint planning sessions, learning core Agile principles."
+                                    "Contributed front-end and back-end features to the company’s flagship CRM application.",
+                                    "Gained foundational experience in cloud deployment and release management by assisting with monthly production releases.",
+                                    "Actively participated in daily stand-ups and contributed to sprint planning, solidifying core Agile understanding."
                                 ]}
                             />
                         </div>
                     </div>
                 </section>
 
-                {/* --- 6. Certifications Section --- */}
+                {/* --- 6. Certifications Section (Updated per CV) --- */}
                 <section id="certifications" className="cert-section py-24">
                     <div className="max-w-7xl mx-auto">
                         <div className="text-center mb-12 scroll-animate"> {/* ADDED scroll-animate class */}
@@ -1437,8 +1503,8 @@ const App = () => {
                                     <Icon name="award" />
                                 </div>
                                 <div className="cert-details">
-                                    <h3 className="cert-title">Certified Scrum Master (CSM)</h3>
-                                    <p className="cert-subtitle">Scrum Alliance, 2021</p>
+                                    <h3 className="cert-title">Professional Scrum Master (PSM I)</h3>
+                                    <p className="cert-subtitle">Scrum.org</p>
                                 </div>
                             </div>
                             <div className="cert-card scroll-animate"> {/* ADDED scroll-animate class */}
@@ -1446,8 +1512,8 @@ const App = () => {
                                     <Icon name="file-text" />
                                 </div>
                                 <div className="cert-details">
-                                    <h3 className="cert-title">AWS Certified Developer - Associate</h3>
-                                    <p className="cert-subtitle">Amazon Web Services, 2022</p>
+                                    <h3 className="cert-title">SAFe Agilist</h3>
+                                    <p className="cert-subtitle">Scaled Agile, Inc.</p>
                                 </div>
                             </div>
                             <div className="cert-card scroll-animate"> {/* ADDED scroll-animate class */}
@@ -1455,8 +1521,8 @@ const App = () => {
                                     <Icon name="award" />
                                 </div>
                                 <div className="cert-details">
-                                    <h3 className="cert-title">Professional Scrum Product Owner (PSPO)</h3>
-                                    <p className="cert-subtitle">Scrum.org, 2023</p>
+                                    <h3 className="cert-title">Professional Scrum Product Owner (PSPO I)</h3>
+                                    <p className="cert-subtitle">Scrum.org</p>
                                 </div>
                             </div>
                             <div className="cert-card scroll-animate"> {/* ADDED scroll-animate class */}
@@ -1465,7 +1531,7 @@ const App = () => {
                                 </div>
                                 <div className="cert-details">
                                     <h3 className="cert-title">M.Sc. Computer Science</h3>
-                                    <p className="cert-subtitle">University of Manchester, 2016</p>
+                                    <p className="cert-subtitle">University of Manchester</p>
                                 </div>
                             </div>
                         </div>
@@ -1480,7 +1546,7 @@ const App = () => {
                             <p className="section-title-tagline">Let's build something great together. I am actively looking for new opportunities.</p>
                         </div>
                         <div className="contact-grid">
-                            {/* Contact Card: Email */}
+                            {/* Contact Card: Email (Verified with CV) */}
                             <div className="contact-card accent scroll-animate"> {/* ADDED scroll-animate class */}
                                 <div className="contact-icon">
                                     <Icon name="mail" />
@@ -1489,7 +1555,7 @@ const App = () => {
                                 <p className="contact-value">scrummasterdhaval@gmail.com</p>
                             </div>
 
-                            {/* Contact Card: Phone */}
+                            {/* Contact Card: Phone (Verified with CV) */}
                             <div className="contact-card blue scroll-animate"> {/* ADDED scroll-animate class */}
                                 <div className="contact-icon">
                                     <Icon name="phone" />
@@ -1498,7 +1564,7 @@ const App = () => {
                                 <p className="contact-value">+44 7767 950307</p>
                             </div>
 
-                            {/* Contact Card: Location */}
+                            {/* Contact Card: Location (Verified with CV) */}
                             <div className="contact-card accent scroll-animate"> {/* ADDED scroll-animate class */}
                                 <div className="contact-icon">
                                     <Icon name="map-pin" />
