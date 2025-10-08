@@ -21,22 +21,26 @@ export function Experience() {
           </div>
         </AnimatedSection>
         <div className="relative">
-          <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-border"></div>
+          {/* Vertical line for the timeline */}
+          <div className="absolute left-6 top-0 h-full w-px bg-border md:left-1/2 md:-translate-x-1/2"></div>
           {experience.map((item, index) => (
             <div key={index} className="group relative mb-12 flex items-start">
-              <div
-                className={`absolute top-4 flex h-full items-center ${
-                  index % 2 === 0 ? 'left-1/2 -translate-x-1/2' : 'left-1/2 -translate-x-1/2'
-                }`}
-              >
-                <div className="z-10 rounded-full bg-primary p-2">
-                  <Briefcase className="h-5 w-5 text-primary-foreground" />
-                </div>
+              {/* Timeline dot */}
+              <div className="absolute top-4 left-6 z-10 -translate-x-1/2 rounded-full bg-primary p-2 md:left-1/2">
+                <Briefcase className="h-5 w-5 text-primary-foreground" />
               </div>
 
               <AnimatedSection
-                animation={index % 2 === 0 ? 'animate-fade-in-right' : 'animate-fade-in-left'}
-                className={`w-[calc(50%-2rem)] ${index % 2 === 0 ? 'mr-auto' : 'ml-auto'}`}
+                animation={
+                  index % 2 === 0
+                    ? 'animate-fade-in-right'
+                    : 'md:animate-fade-in-left'
+                }
+                className={`w-full pl-16 md:w-[calc(50%-2rem)] ${
+                  index % 2 === 0
+                    ? 'md:mr-auto md:pl-0 md:pr-8'
+                    : 'md:ml-auto md:pl-8'
+                }`}
               >
                 <Card
                   className={`bg-secondary/30 backdrop-blur-sm border border-secondary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 w-full`}
