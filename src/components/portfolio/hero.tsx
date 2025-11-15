@@ -33,9 +33,7 @@ export function Hero() {
             alt="John Doe"
             width={400}
             height={400}
-            className="rounded-full border-4 border-background object-cover shadow-lg relative transform transition-transform duration-500 group-hover:scale-105"
-            data-ai-hint="professional portrait"
-          />
+            className="rounded-full border-4 border-background object-cover shadow-lg relative transform transition-transform duration-500 group-hover:scale-105"          />
         </div>
       </AnimatedSection>
     </section>

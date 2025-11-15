@@ -34,7 +34,6 @@ export function Certifications() {
                     width={64}
                     height={64}
                     className="rounded-lg bg-white p-2 object-contain"
-                    data-ai-hint={cert.dataAiHint}
                   />
                   <div className="flex flex-col">
                     <h3 className="text-lg font-bold">{cert.name}</h3>
