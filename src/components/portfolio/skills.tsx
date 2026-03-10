@@ -30,7 +30,7 @@ export function Skills() {
                       <div key={tool.name} className="flex flex-col items-center gap-3 text-center">
                         <div className="bg-background/50 rounded-full p-4 flex items-center justify-center w-20 h-20 border border-border transition-all duration-300 hover:shadow-md hover:border-primary/50">
                           {typeof tool.logo === 'string' ? (
-                            <Image src={tool.logo} alt={`${tool.name} logo`} width={48} height={48} className="object-contain" />
+                            <Image src={tool.logo} alt={`${tool.name} logo`} width={48} height={48} unoptimized className="object-contain" />
                           ) : (
                             tool.logo
                           )}

@@ -62,6 +62,7 @@ export function Experience() {
                         alt={`${item.company} logo`}
                         width={40}
                         height={40}
+                        unoptimized
                         className="rounded-full bg-white p-1"
                       />
                     </div>

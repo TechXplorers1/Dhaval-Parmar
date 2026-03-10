@@ -29,6 +29,7 @@ export function Domains() {
                       src={domain.image} 
                       alt={domain.name} 
                       fill 
+                      unoptimized
                       className="rounded-t-lg object-cover"
                       data-ai-hint={domain.dataAiHint}
                     />

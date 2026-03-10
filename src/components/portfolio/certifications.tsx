@@ -33,6 +33,7 @@ export function Certifications() {
                     alt={`${cert.issuer} logo`}
                     width={64}
                     height={64}
+                    unoptimized
                     className="rounded-lg bg-white p-2 object-contain"
                   />
                   <div className="flex flex-col">

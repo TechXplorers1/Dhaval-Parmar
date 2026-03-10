@@ -29,10 +29,11 @@ export function Hero() {
       <AnimatedSection animation="animate-fade-in-right">
         <div className="relative flex justify-center group">
           <Image
-            src="https://media.licdn.com/dms/image/v2/D5603AQE4wI5u0v_fcA/profile-displayphoto-crop_800_800/B56ZgntS7XH0AM-/0/1753012843219?e=1762992000&v=beta&t=ruvkrnZoDkL5YZx6wljp5AneSaxa1ozC_rDAjUqsnAE"
-            alt="John Doe"
+            src="/dhaval-parmar.png"
+            alt="Dhaval Parmar"
             width={400}
             height={400}
+            priority
             className="rounded-full border-4 border-background object-cover shadow-lg relative transform transition-transform duration-500 group-hover:scale-105"          />
         </div>
       </AnimatedSection>
